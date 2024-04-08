@@ -23,7 +23,7 @@ yargs.command({
             type: 'string' //value should be a string
         }
     },
-    handler: function (argv) {
+    handler(argv) {
         notes.addNote(argv.title, argv.body);
     }
 })
@@ -40,7 +40,7 @@ yargs.command({
             type: 'string'
         }
     },
-    handler: function (argv) {
+    handler(argv) {
         notes.removeNote(argv.title);
     }
 })
@@ -49,8 +49,9 @@ yargs.command({
 yargs.command({
     command: 'list',
     describe: "List your note",
-    handler: function () {
-        console.log("Listing out all notes!!")
+    handler() {
+        notes.listNotes();
+        // console.log("Listing out all notes!!")
     }
 })
 
@@ -58,8 +59,15 @@ yargs.command({
 yargs.command({
     command: 'read',
     describe: "Read a note",
-    handler: function () {
-        console.log("Read the note!!")
+    builder: { //not necessary to give this. add the otions for the commands 
+        title: {
+            describe: "Read Note by title",
+            demandOption: true, //by default it is false if you are not providing this then it is not mandatory to give the title
+            type: 'string', // if you are not providing the title value it will give an empty string. if you are not adding this property and not providing the type value it will give true value in the title
+        },
+    },
+    handler(argv) {
+        notes.readNotes(argv.title);
     }
 })
 
